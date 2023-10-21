@@ -1,12 +1,12 @@
 from torch import nn
 
 class Generator(nn.Module):
-    def __init__(self, img_res,):
+    def __init__(self, img_res, latent_size):
         super(Generator, self).__init__()
 
         self.img_res = img_res[0]
         self.init_size = self.img_res // 4
-        self.l1 = nn.Sequential(nn.Linear(100, 128 * self.init_size ** 2))
+        self.l1 = nn.Sequential(nn.Linear(latent_size, 128 * self.init_size ** 2))
 
         self.conv_blocks = nn.Sequential(
             nn.BatchNorm2d(128),

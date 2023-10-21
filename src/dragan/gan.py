@@ -52,7 +52,9 @@ def compute_gradient_penalty(D, X):
 def train(config, args):
     img_res = (config['img_res_w'], config['img_res_h'])
     pic_path = config['pic_searched_path']
+    pic_path = os.path.join(pic_path, args.gan)
     pic_gen_path = config['pic_gen_path']
+    pic_gen_path = os.path.join(pic_gen_path, args.gan)
     batch_size = config['dragan']['batch_size']
     epoch_num = config['dragan']['epoch_num']
     latent_dim = config['dragan']['latent_size']
@@ -71,8 +73,6 @@ def train(config, args):
     adversarial_loss = torch.nn.BCELoss()
     generator = Generator(img_res, latent_dim)
     discriminator = Discriminator(img_res)
-    optim_G = torch.optim.Adam(generator.parameters(), lr=lr, betas=(b1, b2))
-    optim_D = torch.optim.Adam(generator.parameters(), lr=lr, betas=(b1, b2))
     epoch_start = 0
 
     if args.resume:
@@ -80,8 +80,6 @@ def train(config, args):
         dis_ckpt = load_ckpt('checkpoint/dragan/dis.pt')
         generator.load_state_dict(gen_ckpt['state_dict'])
         discriminator.load_state_dict(dis_ckpt['state_dict'])
-        optim_G.load_state_dict(gen_ckpt['optimizer'])
-        optim_D.load_state_dict(dis_ckpt['optimizer'])
         epoch_start = min(gen_ckpt['epoch'], dis_ckpt['epoch'])
     else:
         generator.apply(weights_init_normal)
@@ -90,6 +88,12 @@ def train(config, args):
     generator.cuda()
     discriminator.cuda()
     adversarial_loss.cuda()
+
+    optim_G = torch.optim.Adam(generator.parameters(), lr=lr, betas=(b1, b2))
+    optim_D = torch.optim.Adam(generator.parameters(), lr=lr, betas=(b1, b2))
+    if args.resume:
+        optim_G.load_state_dict(gen_ckpt['optimizer'])
+        optim_D.load_state_dict(dis_ckpt['optimizer'])
 
     dataset = ImageLoader(pic_path=pic_path, img_res=img_res)
     dataloader = torch.utils.data.DataLoader(dataset, batch_size=batch_size, shuffle=True, num_workers=config['dragan']['num_workers'])

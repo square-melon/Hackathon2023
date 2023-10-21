@@ -4,10 +4,11 @@ import urllib
 import os
 import shutil
 
-def crawl(config):
+def crawl(config, args):
 
     # parser
     pic_searched_path = config['pic_searched_path']
+    pic_searched_path = os.path.join(pic_searched_path, args.gan)
     pic_gen_path = config['pic_gen_path']
     pic_search_num = config['search_num']
     search_engine = config['search_engine']
