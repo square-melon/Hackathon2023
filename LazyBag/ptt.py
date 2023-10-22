@@ -7,7 +7,7 @@ import urllib.parse
 from bs4 import BeautifulSoup
 import os
 import openai
-openai.api_key = "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"
+openai.api_key = ""
 openai.organization = "org-dKb6Se0pRzf3hccYKKg8awJG"
 
 message_history = []
