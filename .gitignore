@@ -8,3 +8,4 @@ GAN/picture_searched/
 GAN/ChromeDriver/
 GAN/chromedriver.exe
 GAN/LICENSE.chromedriver
+GAN/src/__pycache__/
