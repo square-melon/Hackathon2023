@@ -1,5 +1,5 @@
 from src.opt import Parser
-from src.crawler import crawl
+from src.crawler_new import crawl
 from src.dcgan.gan import train as dcgan_train
 from src.dcgan.gan import gen as dcgan_gen
 from src.dragan.gan import train as dragan_train

@@ -22,11 +22,13 @@ def crawl(config, args):
     # Google
     if search_engine == 'google':
         google_storage = {'root_dir': pic_searched_path}
-        filters = dict(size='=256x256')
+        filter = 'imagesize:256x256 filetype:jpg'
+
+        keyword_search = keyword + ' ' + filter
 
         google_crawler = GoogleImageCrawler(
             feeder_threads=1,
             parser_threads=1,
             downloader_threads=4,
             storage=google_storage)
-        google_crawler.crawl(keyword=keyword, filters=filters, max_num=pic_search_num, file_idx_offset=0)
+        google_crawler.crawl(keyword=keyword_search, max_num=pic_search_num, file_idx_offset=0)

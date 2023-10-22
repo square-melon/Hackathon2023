@@ -19,11 +19,6 @@ class ImageLoader(torch.utils.data.Dataset):
                 continue
 
         self.file_num = len(self.all_file)
-        self.transformer = transforms.Compose([
-            # transforms.CenterCrop((1024, 1024)),
-            transforms.Resize(self.img_res),
-            transforms.ToTensor()
-            ])
 
     def __len__(self):
         return self.file_num
@@ -31,5 +26,10 @@ class ImageLoader(torch.utils.data.Dataset):
     def __getitem__(self, index):
         file_name = self.all_file[index]
         with Image.open(os.path.join(self.pic_path, file_name)).convert('RGB') as im:
-            img = self.transformer(im)
+            transformer = transforms.Compose([
+                transforms.CenterCrop((min(im.size), min(im.size))),
+                transforms.Resize(self.img_res),
+                transforms.ToTensor()
+            ])
+            img = transformer(im)
             return img
